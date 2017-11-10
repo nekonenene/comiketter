@@ -1,3 +1,8 @@
 .container
   .section
     h1.header さいしょのページです
+
+.container
+  .section
+    .row
+      = link_to "Twitterログイン", auth_new_path(provider: :twitter)

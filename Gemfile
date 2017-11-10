@@ -36,6 +36,7 @@ gem "jbuilder", "~> 2.5"
 ## Adding
 gem "dotenv-rails"
 gem "mysql2"
+gem "omniauth-twitter"
 gem "slim-rails"
 
 
