@@ -34,6 +34,7 @@ gem "jbuilder", "~> 2.5"
 # gem "capistrano-rails", group: :development
 
 ## Adding
+gem "devise"
 gem "dotenv-rails"
 gem "mysql2"
 gem "omniauth-twitter"
