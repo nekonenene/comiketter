@@ -1,6 +1,9 @@
 .container
   .section
     h1.header さいしょのページです
+    p
+      - if current_user
+        | @#{current_user.username}
 
 .container
   .section
@@ -10,3 +13,5 @@
     .row
       /= link_to "Twitterログイン", auth_new_path(provider: :twitter)
       = link_to "Twitterログイン", user_twitter_omniauth_authorize_path
+      br
+      = link_to "ログアウト", destroy_user_session_path

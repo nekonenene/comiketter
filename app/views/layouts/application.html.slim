@@ -10,14 +10,19 @@ html
     / メニューバー
     nav.light-green
       .nav-wrapper.container
-        a.brand-logo href="#" #{ENV["APP_NAME"]}
-        ul id="nav-mobile" class="right hide-on-med-and-down"
+        = link_to ENV["APP_NAME"], root_url, class: "brand-logo"
+        ul.right.hide-on-med-and-down
           li
-            a href="#" A
+            = link_to "A", root_url
           li
-            a href="#" B
+            = link_to "B", root_url
+        ul#nav-mobile.side-nav
           li
-            a href="#" C
+            = link_to "A", root_url
+          li
+            = link_to "B", root_url
+        a.button-collapse href="javascript:void(0)" data-activates="nav-mobile"
+          i.material-icons menu
 
     / 本体
     = yield
@@ -31,3 +36,6 @@ html
         .container
           a.light-blue-text.text-lighten-5.right href="//twitter.com/nekonenene" target="_blank"
             | 作った人： ハトネコエ (@nekonenene)
+
+    javascript:
+      $(".button-collapse").sideNav();
