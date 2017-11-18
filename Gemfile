@@ -1,3 +1,4 @@
+# coding: utf-8
 source "https://rubygems.org"
 
 git_source(:github) do |repo_name|
@@ -65,5 +66,11 @@ group :development do
   gem "yard"
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:x64_mingw]
+# ruby -e 'puts RUBY_PLATFORM'
+case RUBY_PLATFORM
+when /cygwin/
+  gem "tzinfo-data" # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+  gem "io-console"
+  gem "bigdecimal"
+  gem "redcarpet" # for yard
+end
