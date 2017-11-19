@@ -5,6 +5,8 @@ html
     = csrf_meta_tags
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    / Font Awesome
+    link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"
 
   body
     / メニューバー
@@ -13,7 +15,9 @@ html
         = link_to app_name, root_url, class: "brand-logo left"
         ul.right
           - unless user_signed_in?
-            = link_to "Twitterログイン", user_twitter_omniauth_authorize_path
+            a href="#{user_twitter_omniauth_authorize_path}"
+              i.fa.fa-twitter aria-hidden="true"
+              | Twitterでログイン
           - else
             = link_to "@#{current_user.username} からログアウト", destroy_user_session_path
         / ドロワーメニューにしたいときはここをコメントアウト & 上のやつに .hide-on-med-and-down
@@ -33,7 +37,9 @@ html
       .container.center
         .row
           - unless user_signed_in?
-            = link_to "Twitterログイン", user_twitter_omniauth_authorize_path
+            a href="#{user_twitter_omniauth_authorize_path}"
+              i.fa.fa-twitter aria-hidden="true"
+              | Twitterでログイン
           - else
             = link_to "@#{current_user.username} からログアウト", destroy_user_session_path
       .footer-copyright.green.darken-2

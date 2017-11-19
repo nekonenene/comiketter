@@ -3,6 +3,16 @@
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import "import_materialize";
 
+@import "https://fonts.googleapis.com/earlyaccess/roundedmplus1c.css";
+
 body {
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", "游ゴシック Medium", "Yu Gothic", YuGothic, Verdana, Meiryo, sans-serif;
+  font-family: "Rounded Mplus 1c", "Roboto", "-apple-system", "Helvetica Neue", "游ゴシック Medium", "Yu Gothic", YuGothic, Verdana, Meiryo, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.07rem;
+  line-height: 1.9rem;
+  min-width: 500px;
+}
+
+i.fa {
+  margin-right: 0.5em;
 }
