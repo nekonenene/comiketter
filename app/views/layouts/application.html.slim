@@ -10,7 +10,7 @@ html
     / メニューバー
     nav.light-green
       .nav-wrapper.container
-        = link_to ENV["APP_NAME"], root_url, class: "brand-logo left"
+        = link_to app_name, root_url, class: "brand-logo left"
         ul.right
           - unless user_signed_in?
             = link_to "Twitterログイン", user_twitter_omniauth_authorize_path

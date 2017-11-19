@@ -1,17 +1,4 @@
-.container
-  .section
-    / devise のメッセージ。全然使わない
-      p.notice = notice
-      p.alert = alert
-    h1.header さいしょのページです
-    p
-      - if current_user
-        | @#{current_user.username}
-
-.container
-  .section
-    .row
-      .col.s6
-        | やぁ
-      .col.s6
-        | こんにちは
+- if user_signed_in?
+  = render "user_contents"
+- else
+  = render "nonuser_contents"
