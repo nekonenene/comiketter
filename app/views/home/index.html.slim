@@ -1,5 +1,8 @@
 .container
   .section
+    / devise のメッセージ。全然使わない
+      p.notice = notice
+      p.alert = alert
     h1.header さいしょのページです
     p
       - if current_user
@@ -8,10 +11,7 @@
 .container
   .section
     .row
-      p.notice = notice
-      p.alert = alert
-    .row
-      /= link_to "Twitterログイン", auth_new_path(provider: :twitter)
-      = link_to "Twitterログイン", user_twitter_omniauth_authorize_path
-      br
-      = link_to "ログアウト", destroy_user_session_path
+      .col.s6
+        | やぁ
+      .col.s6
+        | こんにちは
