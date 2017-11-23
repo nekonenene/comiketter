@@ -20,6 +20,7 @@ namespace :ridgepole do
   task reset: :environment do
     Rake::Task["db:reset"].invoke
     ridgepole("--apply", "--file #{schema_file}")
+    Rake::Task["db:schema:dump"].invoke
   end
 
   private
