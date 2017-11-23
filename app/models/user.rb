@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  devise :rememberable, :trackable, :timeoutable, :omniauthable, :omniauth_providers => [:twitter]
-
   class << self
     # 認証情報を元にユーザー検索、存在しなければ作る
     def from_omniauth(auth)

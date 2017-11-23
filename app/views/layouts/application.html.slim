@@ -14,8 +14,8 @@ html
       .nav-wrapper.container
         = link_to app_name, root_url, class: "brand-logo left"
         ul.right
-          - unless user_signed_in?
-            a href="#{user_twitter_omniauth_authorize_path}"
+          - unless false #user_signed_in?
+            a href="#{auth_new_path(provider: :twitter)}"
               i.fa.fa-twitter aria-hidden="true"
               | Twitterでログイン
           - else
@@ -36,8 +36,8 @@ html
     footer.page-footer.light-blue.lighten-5
       .container.center
         .row
-          - unless user_signed_in?
-            a href="#{user_twitter_omniauth_authorize_path}"
+          - unless false #user_signed_in?
+            a href="#{auth_new_path(provider: :twitter)}"
               i.fa.fa-twitter aria-hidden="true"
               | Twitterでログイン
           - else

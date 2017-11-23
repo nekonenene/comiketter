@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   root to: "home#index"
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
-  devise_scope :user do
-    get "logout" => "devise/sessions#destroy", as: :destroy_user_session
-  end
+  resources :auth, only: [:destroy], format: false
+  get "auth/:provider/new", to: "auth#new", format: false, as: :auth_new
+  get "auth/:provider/callback", to: "auth#create", format: false
 end
