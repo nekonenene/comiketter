@@ -14,8 +14,16 @@ run:
 
 .PHONY: db-migrate
 db-migrate:
-	bundle exec rake db:migrate
+	bundle exec rake ridgepole:apply
+
+.PHONY: db-migrate-dry-run
+db-migrate-dry-run:
+	bundle exec rake ridgepole:dry_run
 
 .PHONY: db-reset
 db-reset:
-	bundle exec rake db:migrate:reset
+	bundle exec rake ridgepole:reset
+
+.PHONY: update-schemafile
+update-schemafile:
+	bundle exec rake ridgepole:export
