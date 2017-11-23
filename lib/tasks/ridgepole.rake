@@ -1,3 +1,4 @@
+# dotenv にて環境変数を読み込んだ上で config/database.yml を読み込みたいので rake タスクにしている
 namespace :ridgepole do
   desc "Export schemafile"
   task export: :environment do
