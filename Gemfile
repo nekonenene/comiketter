@@ -34,11 +34,13 @@ gem "jbuilder", "~> 2.5"
 # gem "capistrano-rails", group: :development
 
 ## Adding - production
+gem "activerecord-session_store"
 gem "devise"
 gem "dotenv-rails"
 gem "jquery-rails"
 gem "materialize-sass" # jquery-rails に依存
 gem "omniauth-twitter"
+gem "ridgepole"
 gem "slim-rails"
 
 
