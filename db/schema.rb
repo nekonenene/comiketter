@@ -13,18 +13,15 @@
 ActiveRecord::Schema.define(version: 20171118195259) do
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+    t.string "access_token"
+    t.string "access_token_secret"
+    t.string "handle", comment: "メンションに使われるID"
     t.string "username"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "provider", collation: "utf8mb4_general_ci"
     t.string "uid"
-    t.index ["uid"], name: "index_users_on_uid", unique: true
+    t.index ["uid", "access_token"], name: "index_users_on_uid", unique: true
   end
 
 end
