@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20171118195259) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
+    t.string "provider", collation: "utf8mb4_general_ci"
     t.string "uid"
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
