@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
-  t.string "handle", comment: "メンションに使われるID"
+  t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
   t.string "username"
   t.string "provider", collation: "utf8mb4_general_ci"
   t.string "uid"
