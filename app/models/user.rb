@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
   class << self
     # 認証情報を元にユーザー検索、存在しなければ作る
-    def create_by_response(response)
+    def find_or_create_by_response(response)
       auth_user = User.new
       auth_user.provider = response["provider"]
       auth_user.uid = response["uid"]

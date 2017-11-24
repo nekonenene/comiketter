@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  def new
+  def signin
     redirect_to "/auth/#{params[:provider]}"
   end
 
@@ -7,7 +7,8 @@ class AuthController < ApplicationController
     case provider = params[:provider]
     when "twitter"
       response_data = request.env["omniauth.auth"].except("extra")
-      user = User.create_by_response(response_data)
+      user = User.find_or_create_by_response(response_data)
+      session[:user_id] = user.id
     else
       flash[:alert] = I18n.t("auth.not_supported_provider", provider: provider.capitalize)
     end
@@ -15,7 +16,8 @@ class AuthController < ApplicationController
     redirect_to root_url
   end
 
-  def destroy
+  def signout
+    session[:user_id] = nil
     redirect_to root_url
   end
 end

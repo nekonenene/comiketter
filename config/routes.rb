@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: "home#index"
 
-  resources :auth, only: [:destroy], format: false
-  get "auth/:provider/new", to: "auth#new", format: false, as: :auth_new
+  get "auth/:provider/signin", to: "auth#signin", format: false, as: :auth_signin
   get "auth/:provider/callback", to: "auth#create", format: false
+  get "auth/signout", to: "auth#signout", format: false
 end
