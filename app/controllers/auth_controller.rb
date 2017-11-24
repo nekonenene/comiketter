@@ -9,6 +9,7 @@ class AuthController < ApplicationController
       response_data = request.env["omniauth.auth"].except("extra")
       user = User.create_by_response(response_data)
       p user
+      puts user.access_token_secret
     else
       raise "Provider \"#{provider}\" is not supported"
     end

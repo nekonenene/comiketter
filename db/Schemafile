@@ -6,7 +6,8 @@ create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=u
   t.string "provider", collation: "utf8mb4_general_ci"
   t.string "uid"
   t.string "access_token"
-  t.string "access_token_secret"
+  t.string "encrypted_access_token_secret"
+  t.string "salt"
 
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
