@@ -42,6 +42,7 @@ gem "materialize-sass" # jquery-rails に依存
 gem "omniauth-twitter"
 gem "ridgepole"
 gem "slim-rails"
+gem "twitter"
 
 
 group :development, :test do

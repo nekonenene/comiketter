@@ -7,6 +7,12 @@
   .section
     .row
       .col.s6
-        | フォローしてる人の一覧
+        h4 フォローしてる人（#{@friends&.count || 0}人）
+        - @friends&.each do |friend|
+          | @#{friend[:screen_name]} #{friend[:name]}
+          br
       .col.s6
-        | フォローしてくれてる人の一覧
+        h4 フォローしてくれてる人（#{@followers&.count || 0}人）
+        - @followers&.each do |follower|
+          | @#{follower[:screen_name]} #{follower[:name]}
+          br
