@@ -20,4 +20,11 @@ class AuthController < ApplicationController
     session[:user_id] = nil
     redirect_to root_url
   end
+
+  def failure
+    provider = params[:strategy]
+    flash[:alert] = I18n.t("auth.signin_failed", provider: provider&.capitalize)
+
+    redirect_to root_url
+  end
 end

@@ -32,3 +32,4 @@
 en:
   auth:
     not_supported_provider: "%{provider} is not supported."
+    signin_failed: "Could not authenticate you from %{kind}."
