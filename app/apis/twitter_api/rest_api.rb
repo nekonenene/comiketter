@@ -15,15 +15,15 @@ class TwitterApi::RestApi
     end
   end
 
-  # @param [String] handle ユーザーID
+  # @param [String] handle_or_uid ユーザーID もしくは uid
   # @return [String, String] フォロワー一覧, エラーメッセージ
-  def get_followers(handle)
+  def get_followers(handle_or_uid)
     followers = []
     next_cursor = -1
 
     begin
       MAX_REQUESTS_PER_15_MINITUES.times do
-        attrs = @client.followers(user: handle, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
+        attrs = @client.followers(user: handle_or_uid, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
         followers.concat(attrs[:users])
         next_cursor = attrs[:next_cursor].to_i
         break if next_cursor == 0
@@ -36,15 +36,15 @@ class TwitterApi::RestApi
     return followers, nil
   end
 
-  # @param [String] handle ユーザーID
+  # @param [String] handle_or_uid ユーザーID もしくは uid
   # @return [String, String] フレンズ一覧, エラーメッセージ
-  def get_friends(handle)
+  def get_friends(handle_or_uid)
     friends = []
     next_cursor = -1
 
     begin
       MAX_REQUESTS_PER_15_MINITUES.times do
-        attrs = @client.friends(user: handle, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
+        attrs = @client.friends(user: handle_or_uid, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
         friends.concat(attrs[:users])
         next_cursor = attrs[:next_cursor].to_i
         break if next_cursor == 0

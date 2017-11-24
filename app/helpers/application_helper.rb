@@ -10,4 +10,8 @@ module ApplicationHelper
   def current_user
     @current_user
   end
+
+  def twitter_user_url(handle)
+    "https://twitter.com/" + handle
+  end
 end
