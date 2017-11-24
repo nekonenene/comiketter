@@ -10,6 +10,7 @@ init:
 
 .PHONY: run
 run:
+	bundle exec spring stop
 	bundle exec foreman start
 
 .PHONY: db-migrate
