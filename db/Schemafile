@@ -1,16 +1,23 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
-  t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
-  t.string "username"
-  t.string "provider", collation: "utf8mb4_general_ci"
-  t.string "uid"
-  t.string "access_token"
-  t.string "encrypted_access_token_secret"
-  t.string "salt"
+create_table :users, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+  t.string :handle, collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
+  t.string :username
+  t.string :provider, collation: "utf8mb4_general_ci"
+  t.string :uid
+  t.string :access_token
+  t.string :encrypted_access_token_secret
+  t.string :salt
+  t.timestamps
 
-  t.datetime "created_at", null: false
-  t.datetime "updated_at", null: false
+  t.index [:uid, :access_token], name: "index_users_on_uid", unique: true
+end
 
-  t.index ["uid", "access_token"], name: "index_users_on_uid", unique: true
+create_table :sessions, comment: "for activerecord-session_store" do |t|
+  t.string :session_id, null: false
+  t.text :data
+  t.timestamps
+
+  t.index :session_id, unique: true
+  t.index :updated_at
 end
