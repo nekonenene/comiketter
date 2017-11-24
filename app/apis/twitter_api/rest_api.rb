@@ -1,6 +1,7 @@
 class TwitterApi::RestApi
 
-  MAX_GETTABLE_USERS = 5000 # API で取得可能なフォロワー・フレンズ上限
+  MAX_REQUESTS_PER_15_MINITUES = 15 # APIで15分間に可能なリクエスト数
+  LIMIT_PER_PAGE = 200 # 1ページに取得するデータ数（ちなみにデフォルトは20）
 
   # @param [String] access_token
   # @param [String] access_token_secret
@@ -17,13 +18,12 @@ class TwitterApi::RestApi
   # @param [String] handle ユーザーID
   # @return [String, String] フォロワー一覧, エラーメッセージ
   def get_followers(handle)
-    limit = 200
     followers = []
     next_cursor = -1
 
     begin
-      (MAX_GETTABLE_USERS / limit).times do
-        attrs = @client.followers(user: handle, count: limit, skip_status: true, cursor: next_cursor).attrs
+      MAX_REQUESTS_PER_15_MINITUES.times do
+        attrs = @client.followers(user: handle, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
         followers.concat(attrs[:users])
         next_cursor = attrs[:next_cursor].to_i
         break if next_cursor == 0
@@ -39,13 +39,12 @@ class TwitterApi::RestApi
   # @param [String] handle ユーザーID
   # @return [String, String] フレンズ一覧, エラーメッセージ
   def get_friends(handle)
-    limit = 200
     friends = []
     next_cursor = -1
 
     begin
-      (MAX_GETTABLE_USERS / limit).times do
-        attrs = @client.friends(user: handle, count: limit, skip_status: true, cursor: next_cursor).attrs
+      MAX_REQUESTS_PER_15_MINITUES.times do
+        attrs = @client.friends(user: handle, count: LIMIT_PER_PAGE, skip_status: true, cursor: next_cursor).attrs
         friends.concat(attrs[:users])
         next_cursor = attrs[:next_cursor].to_i
         break if next_cursor == 0
