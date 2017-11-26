@@ -13,11 +13,6 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
-# Indexes
-#
-#  index_circle_spaces_on_event_id  (event_id)
-#  index_circle_spaces_on_user_id   (user_id)
-#
 # Foreign Keys
 #
 #  fk_events_on_circle_spaces  (event_id => events.id) ON DELETE => nullify ON UPDATE => cascade

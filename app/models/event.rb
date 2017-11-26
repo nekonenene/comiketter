@@ -8,10 +8,6 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
-# Indexes
-#
-#  index_events_on_code  (code) UNIQUE
-#
 
 class Event < ApplicationRecord
 
