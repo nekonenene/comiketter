@@ -62,6 +62,7 @@ group :development do
   gem "spring-watcher-listen", "~> 2.0.0"
 
   ## Adding - development
+  gem "annotate"
   gem "foreman"
   gem "pry-rails"
   gem "yard"
