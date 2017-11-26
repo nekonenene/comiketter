@@ -29,3 +29,7 @@ db-reset:
 .PHONY: update-schemafile
 update-schemafile:
 	bundle exec rake ridgepole:export
+
+.PHONY: annotate
+annotate:
+	bundle exec annotate
