@@ -24,6 +24,7 @@ db-migrate-dry-run:
 .PHONY: db-reset
 db-reset:
 	bundle exec rake ridgepole:reset
+	bundle exec rake db:seed
 
 .PHONY: update-schemafile
 update-schemafile:

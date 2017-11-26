@@ -2,6 +2,8 @@ class User < ApplicationRecord
 
   CIPHER = "AES-256-CBC"
 
+  has_many :circle_space, dependent: :destroy
+
   # @return [MessageEncryptor]
   def encryptor
     key_len = OpenSSL::Cipher.new(CIPHER).key_len
