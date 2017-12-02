@@ -18,7 +18,19 @@ class User < ApplicationRecord
 
   CIPHER = "AES-256-CBC"
 
-  has_many :circle_space, dependent: :destroy
+  has_many :circle_spaces, dependent: :destroy
+
+  # followers of user
+  # @return Array<User>
+  def followers
+    UserFollower.where(user: self).map(&:follower_user)
+  end
+
+  # following users
+  # @return Array<User>
+  def friends
+    UserFollower.where(follower_user: self).map(&:user)
+  end
 
   # @return [MessageEncryptor]
   def encryptor

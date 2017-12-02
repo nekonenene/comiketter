@@ -14,6 +14,18 @@ create_table :users, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=ut
   t.index :handle
 end
 
+create_table :user_followers, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
+  t.bigint :user_id, null: false
+  t.bigint :follower_user_id, null: false
+
+  t.index :user_id
+  t.index :follower_user_id
+  t.index [:user_id, :follower_user_id], unique: true
+end
+
+add_foreign_key :user_followers, :users, column: :user_id, on_update: :cascade, on_delete: :cascade, name: "fk_users_on_user_followers"
+add_foreign_key :user_followers, :users, column: :follower_user_id, on_update: :cascade, on_delete: :cascade, name: "fk_follower_users_on_user_followers"
+
 create_table :events, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント" do |t|
   t.string :code,         null: false, comment: "comike93 など、イベントを一意で示すID文字列"
   t.string :display_name,              comment: "コミックマーケット93 などイベント名"
@@ -23,8 +35,8 @@ create_table :events, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=u
 end
 
 create_table :circle_spaces, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント参加スペース" do |t|
-  t.bigint  :user_id, null: false
-  t.bigint  :event_id
+  t.bigint :user_id, null: false
+  t.bigint :event_id
   t.unsigned_integer :day,          limit: 1,  comment: "参戦日"
   t.string           :hall_name,    limit: 32, comment: "東1, 西3などの館名"
   t.string           :space_prefix, limit: 8,  comment: "キ23aにおけるキ"

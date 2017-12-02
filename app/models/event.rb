@@ -11,6 +11,6 @@
 
 class Event < ApplicationRecord
 
-  has_many :circle_space, dependent: :nullify
+  has_many :circle_spaces, dependent: :nullify
 
 end

@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
+  create_table "user_followers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
+    t.bigint "user_id", null: false
+    t.bigint "follower_user_id", null: false
+    t.index ["follower_user_id"], name: "index_user_followers_on_follower_user_id"
+    t.index ["user_id", "follower_user_id"], name: "index_user_followers_on_user_id_and_follower_user_id", unique: true
+    t.index ["user_id"], name: "index_user_followers_on_user_id"
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
     t.string "username"
@@ -59,4 +67,6 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_foreign_key "circle_spaces", "events", name: "fk_events_on_circle_spaces", on_update: :cascade, on_delete: :nullify
   add_foreign_key "circle_spaces", "users", name: "fk_users_on_circle_spaces", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "user_followers", "users", column: "follower_user_id", name: "fk_follower_users_on_user_followers", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "user_followers", "users", name: "fk_users_on_user_followers", on_update: :cascade, on_delete: :cascade
 end
