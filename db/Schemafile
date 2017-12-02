@@ -1,13 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 create_table :users, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
-  t.string :provider, collation: "utf8mb4_general_ci"
-  t.string :uid
-  t.string :handle,   collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
-  t.string :username
-  t.string :access_token
-  t.string :encrypted_access_token_secret
-  t.string :salt
+  t.string   :provider, collation: "utf8mb4_general_ci"
+  t.string   :uid
+  t.string   :handle,   collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
+  t.string   :username
+  t.string   :icon_url
+  t.string   :website_url
+  t.integer  :followers_count
+  t.integer  :friends_count
+  t.string   :access_token
+  t.string   :encrypted_access_token_secret
+  t.string   :salt
   t.datetime :last_signin_at
   t.datetime :last_followers_updated_at
   t.datetime :last_friends_updated_at

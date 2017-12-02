@@ -54,6 +54,10 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
     t.string "username"
+    t.string "icon_url"
+    t.string "website_url"
+    t.integer "followers_count"
+    t.integer "friends_count"
     t.string "provider", collation: "utf8mb4_general_ci"
     t.string "uid"
     t.string "access_token"
