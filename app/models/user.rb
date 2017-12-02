@@ -19,18 +19,10 @@ class User < ApplicationRecord
   CIPHER = "AES-256-CBC"
 
   has_many :circle_spaces, dependent: :destroy
-
-  # followers of user
-  # @return Array<User>
-  def followers
-    UserFollower.where(user: self).map(&:follower_user)
-  end
-
-  # following users
-  # @return Array<User>
-  def friends
-    UserFollower.where(follower_user: self).map(&:user)
-  end
+  has_many :user_follower_users, class_name: "UserFollower", foreign_key: :user_id, dependent: :destroy
+  has_many :user_follower_followers, class_name: "UserFollower", foreign_key: :follower_user_id, dependent: :destroy
+  has_many :followers, through: :user_follower_users # followers of user
+  has_many :friends, through: :user_follower_followers # following users
 
   # @return [MessageEncryptor]
   def encryptor
