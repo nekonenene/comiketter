@@ -33,3 +33,4 @@ ja:
   auth:
     not_supported_provider: "%{provider} はサポートしていません"
     signin_failed: "%{provider}アカウントによる認証に失敗しました"
+    need_siginin: "ログインが必要です"

@@ -6,6 +6,15 @@
 .container
   .section
     .row
+      .col.s12
+        a href="#{export_path(format: :xlsx)}"
+          button.waves-effect.waves-light.btn-large
+            i.material-icons.left file_download
+            | フォロー・フォロワー一覧のExcelデータをダウンロード
+      .col.s12
+        p.light （フォロー・フォロワー一覧はTwitter APIの仕様上、最大3,000件までしか取得できません。ぐぬぬ……）
+  .section
+    .row
       .col.s6
         - friends = current_user.friends
         h4 フォローしてる人（#{friends.count}人）
