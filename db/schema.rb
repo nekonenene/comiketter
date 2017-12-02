@@ -59,6 +59,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "access_token"
     t.string "encrypted_access_token_secret"
     t.string "salt"
+    t.datetime "last_signin_at"
+    t.datetime "last_followers_updated_at"
+    t.datetime "last_friends_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["handle"], name: "index_users_on_handle"

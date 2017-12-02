@@ -69,7 +69,7 @@ class User < ApplicationRecord
       if user.nil?
         create_new_user(auth_user, access_token_secret)
       else
-        update_user_info_if_need(user, auth_user, access_token_secret)
+        update_user_info(user, auth_user, access_token_secret)
       end
     end
 
@@ -98,12 +98,13 @@ class User < ApplicationRecord
       end
     end
 
-    # 必要であればユーザー情報を更新
+    # 認証情報を元にユーザーを更新
     # @param [User] user DB上のユーザー
     # @param [User] auth_user 認証元から取得したユーザー情報
     # @param [access_token_secret] 暗号化されていないaccess_token_secret
     # @return [User]
-    def update_user_info_if_need(user, auth_user, access_token_secret)
+    def update_user_info(user, auth_user, access_token_secret)
+      user.update(last_signin_at: Time.zone.now)
       user.update(handle: auth_user.handle) if user.handle != auth_user.handle
       user.update(username: auth_user.username) if user.username != auth_user.username
       update_access_token(user, auth_user, access_token_secret) if user.access_token != auth_user.access_token
