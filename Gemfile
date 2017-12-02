@@ -34,6 +34,7 @@ gem "jbuilder", "~> 2.5"
 # gem "capistrano-rails", group: :development
 
 ## Adding - production
+gem "activerecord-import"
 gem "activerecord-session_store"
 gem "devise"
 gem "dotenv-rails"
