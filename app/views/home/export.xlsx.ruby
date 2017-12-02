@@ -14,8 +14,8 @@ Axlsx::Package.new do |p|
     sheet.add_row %w(Twitter\ ID Name Website), style: header_style
     @current_user.followers.find_each do |user|
       row = sheet.add_row [user.handle, user.username, user.website_url], style: default_style
-      sheet.add_hyperlink location: twitter_user_url(user.handle), ref: "A#{row.index + 1}"
-      sheet.add_hyperlink location: user.website_url, ref: "C#{row.index + 1}" if user.website_url.present?
+      sheet.add_hyperlink location: twitter_user_url(user.handle), ref: "A#{row.row_index + 1}"
+      sheet.add_hyperlink location: user.website_url, ref: "C#{row.row_index + 1}" if user.website_url.present?
     end
   end
 
@@ -23,8 +23,8 @@ Axlsx::Package.new do |p|
     sheet.add_row %w(Twitter\ ID Name Website), style: header_style
     @current_user.friends.find_each do |user|
       row = sheet.add_row [user.handle, user.username, user.website_url], style: default_style
-      sheet.add_hyperlink location: twitter_user_url(user.handle), ref: "A#{row.index + 1}"
-      sheet.add_hyperlink location: user.website_url, ref: "C#{row.index + 1}" if user.website_url.present?
+      sheet.add_hyperlink location: twitter_user_url(user.handle), ref: "A#{row.row_index + 1}"
+      sheet.add_hyperlink location: user.website_url, ref: "C#{row.row_index + 1}" if user.website_url.present?
     end
   end
 end

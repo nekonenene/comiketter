@@ -1,3 +1,14 @@
+GIT
+  remote: https://github.com/randym/axlsx.git
+  revision: c8ac844572b25fda358cc01d2104720c4c42f450
+  branch: master
+  specs:
+    axlsx (2.1.0.pre)
+      htmlentities (~> 4.3.4)
+      mimemagic (~> 0.3)
+      nokogiri (>= 1.6.6)
+      rubyzip (>= 1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -52,10 +63,6 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
     arel (8.0.0)
-    axlsx (2.0.1)
-      htmlentities (~> 4.3.1)
-      nokogiri (>= 1.4.1)
-      rubyzip (~> 1.0.0)
     bcrypt (3.1.11)
     bindex (0.5.0)
     buftok (0.2.0)
@@ -128,6 +135,7 @@ GEM
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.9.0)
+    mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
@@ -193,7 +201,7 @@ GEM
       activerecord (>= 5.0.1, < 6)
       diffy
     ruby_dep (1.5.0)
-    rubyzip (1.0.0)
+    rubyzip (1.2.1)
     sass (3.5.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -274,7 +282,7 @@ DEPENDENCIES
   activerecord-import
   activerecord-session_store
   annotate
-  axlsx (~> 2.0.0)
+  axlsx!
   byebug
   capybara (~> 2.13)
   devise

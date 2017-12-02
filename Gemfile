@@ -36,7 +36,7 @@ gem "jbuilder", "~> 2.5"
 ## Adding - production
 gem "activerecord-import"
 gem "activerecord-session_store"
-gem "axlsx", "~> 2.0.0"
+gem "axlsx", github: "randym/axlsx", branch: "master"
 gem "devise"
 gem "dotenv-rails"
 gem "jquery-rails"
