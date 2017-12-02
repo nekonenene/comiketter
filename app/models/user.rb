@@ -5,11 +5,18 @@
 #  id                            :integer          not null, primary key
 #  handle                        :string(255)
 #  username                      :string(255)
+#  icon_url                      :string(255)
+#  website_url                   :string(255)
+#  followers_count               :integer
+#  friends_count                 :integer
 #  provider                      :string(255)
 #  uid                           :string(255)
 #  access_token                  :string(255)
 #  encrypted_access_token_secret :string(255)
 #  salt                          :string(255)
+#  last_signin_at                :datetime
+#  last_followers_updated_at     :datetime
+#  last_friends_updated_at       :datetime
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #
@@ -23,6 +30,30 @@ class User < ApplicationRecord
   has_many :user_follower_followers, class_name: "UserFollower", foreign_key: :follower_user_id, dependent: :destroy
   has_many :followers, through: :user_follower_users # followers of user
   has_many :friends, through: :user_follower_followers # following users
+
+  def update_followers(followers)
+    user_followers = []
+
+    followers.each{ |follower|
+      user = User.create_or_update_follower_or_friends(follower)
+      user_followers << UserFollower.new(user: self, follower_user: user)
+    }
+
+    UserFollower.where(user: self).delete_all
+    UserFollower.import user_followers
+  end
+
+  def update_friends(friends)
+    user_followers = []
+
+    friends.each{ |friends|
+      user = User.create_or_update_follower_or_friends(friends)
+      user_followers << UserFollower.new(user: user, follower_user: self)
+    }
+
+    UserFollower.where(follower_user: self).delete_all
+    UserFollower.import user_followers
+  end
 
   # @return [MessageEncryptor]
   def encryptor
@@ -71,6 +102,36 @@ class User < ApplicationRecord
       else
         update_user_info(user, auth_user, access_token_secret)
       end
+    end
+
+    # フォロワー・フレンズのUserモデルをAPI情報から作成または更新
+    # @param [Hash] user_info Twitter APIから取得したユーザー情報
+    def create_or_update_follower_or_friends(user_info, provider: "twitter")
+      uid = user_info[:id]
+      user = User.find_by(provider: provider, uid: uid)
+
+      if user.nil?
+        user = User.create({
+          provider: provider,
+          uid: uid,
+          handle: user_info[:screen_name],
+          username: user_info[:name],
+          icon_url: user_info[:profile_image_url_https],
+          website_url: user_info[:url],
+          followers_count: user_info[:followers_count],
+          friends_count: user_info[:friends_count],
+        })
+      else
+        user.update({
+          handle: user_info[:screen_name],
+          username: user_info[:name],
+          icon_url: user_info[:profile_image_url_https],
+          website_url: user_info[:url],
+          followers_count: user_info[:followers_count],
+          friends_count: user_info[:friends_count],
+        })
+      end
+      user
     end
 
     private

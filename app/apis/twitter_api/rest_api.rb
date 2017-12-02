@@ -30,7 +30,6 @@ class TwitterApi::RestApi
       end
 
     rescue Twitter::Error::TooManyRequests => e
-      puts "リクエストしすぎデース", e.message # TODO: あとで消す
       return followers, e.message
     end
     return followers, nil
@@ -51,7 +50,6 @@ class TwitterApi::RestApi
       end
 
     rescue Twitter::Error::TooManyRequests => e
-      puts "リクエストしすぎデース", e.message # TODO: あとで消す
       return friends, e.message
     end
     return friends, nil

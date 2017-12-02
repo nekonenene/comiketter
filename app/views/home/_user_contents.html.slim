@@ -7,16 +7,26 @@
   .section
     .row
       .col.s6
-        h4 フォローしてる人（#{@friends&.count || 0}人）
-        - @friends&.each do |user|
+        - friends = current_user.friends
+        h4 フォローしてる人（#{friends.count}人）
+        - friends.each do |user|
           .row
-            .col.s2.l1.xl1 = image_tag user[:profile_image_url_https], style: "height: 2rem"
-            .col.s10.l5.xl4 = link_to "@" + user[:screen_name], twitter_user_url(user[:screen_name])
-            .col.s12.l6.xl7 #{user[:name]}
+            .col.s2.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s10.l5.xl4 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s12.l6.xl7
+              - if user.website_url.present?
+                = link_to user.username, user.website_url
+              - else
+                | #{user.username}
       .col.s6
-        h4 フォローしてくれてる人（#{@followers&.count || 0}人）
-        - @followers&.each do |user|
+        - followers = current_user.followers
+        h4 フォローしてくれてる人（#{followers.count}人）
+        - followers.each do |user|
           .row
-            .col.s2.l1.xl1 = image_tag user[:profile_image_url_https], style: "height: 2rem"
-            .col.s10.l5.xl4 = link_to "@" + user[:screen_name], twitter_user_url(user[:screen_name])
-            .col.s12.l6.xl7 #{user[:name]}
+            .col.s2.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s10.l5.xl4 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s12.l6.xl7
+              - if user.website_url.present?
+                = link_to user.username, user.website_url
+              - else
+                | #{user.username}
