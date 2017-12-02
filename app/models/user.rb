@@ -87,20 +87,26 @@ class User < ApplicationRecord
     # @param [Hash] response 認証元から取得したユーザー情報
     # @return [User]
     def find_or_create_by_response(response)
-      auth_user = User.new
-      auth_user.provider = response["provider"]
-      auth_user.uid = response["uid"]
-      auth_user.handle = response["info"]["nickname"] # @nekonenene などメンションに使うID
-      auth_user.username = response["info"]["name"] # ハトネコエ などユーザー名
-      auth_user.access_token = response["credentials"]["token"]
-      access_token_secret = response["credentials"]["secret"]
+      raw_info = response.dig(:extra, :raw_info)
+      auth_user_info = {
+        provider: response[:provider],
+        uid: response[:uid],
+        handle: response.dig(:info, :nickname), # @nekonenene などメンションに使うID
+        username: response.dig(:info, :name), # ハトネコエ などユーザー名
+        icon_url: response.dig(:extra, :raw_info, :profile_image_url_https),
+        website_url: response.dig(:extra, :raw_info, :entities, :url, :urls, 0, :expanded_url),
+        followers_count: response.dig(:extra, :raw_info, :followers_count),
+        friends_count: response.dig(:extra, :raw_info, :friends_count),
+        access_token: response.dig(:credentials, :token),
+        access_token_secret: response.dig(:credentials, :secret),
+      }
 
-      user = User.find_by(provider: auth_user.provider, uid: auth_user.uid)
+      user = User.find_by(provider: auth_user_info[:provider], uid: auth_user_info[:uid])
 
       if user.nil?
-        create_new_user(auth_user, access_token_secret)
+        create_new_user(auth_user_info)
       else
-        update_user_info(user, auth_user, access_token_secret)
+        update_user_info(user, auth_user_info)
       end
     end
 
@@ -117,7 +123,7 @@ class User < ApplicationRecord
           handle: user_info[:screen_name],
           username: user_info[:name],
           icon_url: user_info[:profile_image_url_https],
-          website_url: user_info[:url],
+          website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
           followers_count: user_info[:followers_count],
           friends_count: user_info[:friends_count],
         })
@@ -126,7 +132,7 @@ class User < ApplicationRecord
           handle: user_info[:screen_name],
           username: user_info[:name],
           icon_url: user_info[:profile_image_url_https],
-          website_url: user_info[:url],
+          website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
           followers_count: user_info[:followers_count],
           friends_count: user_info[:friends_count],
         })
@@ -137,23 +143,27 @@ class User < ApplicationRecord
     private
 
     # ユーザーの新規作成
-    # @param [User] auth_user 認証元から取得したユーザー情報
-    # @param [access_token_secret] 暗号化されていないaccess_token_secret
+    # @param [Hash] auth_user_info 認証元から取得したユーザー情報
     # @return [User] 作成されたユーザー
-    def create_new_user(auth_user, access_token_secret)
+    def create_new_user(auth_user_info)
       salt = SecureRandom::hex(64)
 
       User.transaction do
         user = User.create({
-          provider: auth_user.provider,
-          uid: auth_user.uid,
-          handle: auth_user.handle,
-          username: auth_user.username,
-          access_token: auth_user.access_token,
+          provider: auth_user_info[:provider],
+          uid: auth_user_info[:uid],
+          handle: auth_user_info[:handle],
+          username: auth_user_info[:username],
+          icon_url: auth_user_info[:icon_url],
+          website_url: auth_user_info[:website_url],
+          followers_count: auth_user_info[:followers_count],
+          friends_count: auth_user_info[:friends_count],
+          last_signin_at: Time.zone.now,
+          access_token: auth_user_info[:access_token],
           salt: salt,
         })
 
-        encrypted_access_token_secret = user.encrypt_message(access_token_secret)
+        encrypted_access_token_secret = user.encrypt_message(auth_user_info[:access_token_secret])
         user.update(encrypted_access_token_secret: encrypted_access_token_secret)
         user
       end
@@ -161,30 +171,34 @@ class User < ApplicationRecord
 
     # 認証情報を元にユーザーを更新
     # @param [User] user DB上のユーザー
-    # @param [User] auth_user 認証元から取得したユーザー情報
-    # @param [access_token_secret] 暗号化されていないaccess_token_secret
+    # @param [Hash] auth_user_info 認証元から取得したユーザー情報
     # @return [User]
-    def update_user_info(user, auth_user, access_token_secret)
-      user.update(last_signin_at: Time.zone.now)
-      user.update(handle: auth_user.handle) if user.handle != auth_user.handle
-      user.update(username: auth_user.username) if user.username != auth_user.username
-      update_access_token(user, auth_user, access_token_secret) if user.access_token != auth_user.access_token
+    def update_user_info(user, auth_user_info)
+      user.update({
+        handle: auth_user_info[:handle],
+        username: auth_user_info[:username],
+        icon_url: auth_user_info[:icon_url],
+        website_url: auth_user_info[:website_url],
+        followers_count: auth_user_info[:followers_count],
+        friends_count: auth_user_info[:friends_count],
+        last_signin_at: Time.zone.now,
+      })
+      update_access_token(user, auth_user_info) if user.access_token != auth_user_info[:access_token]
       user
     end
 
     # ユーザーのアクセストークン、シークレットを更新
     # @param [User] user DB上のユーザー
-    # @param [User] auth_user 認証元から取得したユーザー情報
-    # @param [access_token_secret] 暗号化されていないaccess_token_secret
+    # @param [User] auth_user_info 認証元から取得したユーザー情報
     # @return [User]
-    def update_access_token(user, auth_user, access_token_secret)
+    def update_access_token(user, auth_user_info)
       User.transaction do
         if user.salt.nil?
           salt = SecureRandom::hex(64)
           user.update(salt: salt)
         end
-        user.update(access_token: auth_user.access_token)
-        encrypted_access_token_secret = user.encrypt_message(access_token_secret)
+        user.update(access_token: auth_user_info[:access_token])
+        encrypted_access_token_secret = user.encrypt_message(auth_user_info[:access_token_secret])
         user.update(encrypted_access_token_secret: encrypted_access_token_secret)
         user
       end

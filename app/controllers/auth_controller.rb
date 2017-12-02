@@ -6,7 +6,7 @@ class AuthController < ApplicationController
   def create
     case provider = params[:provider]
     when "twitter"
-      response_data = request.env["omniauth.auth"].except("extra")
+      response_data = request.env["omniauth.auth"]
       user = User.find_or_create_by_response(response_data)
       session[:user_id] = user.id
     else
