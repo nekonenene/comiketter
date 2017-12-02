@@ -4,6 +4,6 @@ class ApplicationController < ActionController::Base
 
   def login
     user_id = session[:user_id]
-    @current_user = user_id.present? ? User.find(user_id) : nil
+    @current_user = User.find_by(id: user_id) # nil or User
   end
 end
