@@ -21,7 +21,7 @@ create_table :users, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=ut
   t.index :handle
 end
 
-create_table :user_followers, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
+create_table :user_followers, id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
   t.bigint :user_id, null: false
   t.bigint :follower_user_id, null: false
 

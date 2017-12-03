@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "user_followers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
+  create_table "user_followers", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
     t.bigint "user_id", null: false
     t.bigint "follower_user_id", null: false
     t.index ["follower_user_id"], name: "index_user_followers_on_follower_user_id"
@@ -52,14 +52,14 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+    t.string "provider", collation: "utf8mb4_general_ci"
+    t.string "uid"
     t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
     t.string "username"
     t.string "icon_url"
     t.string "website_url"
     t.integer "followers_count"
     t.integer "friends_count"
-    t.string "provider", collation: "utf8mb4_general_ci"
-    t.string "uid"
     t.string "access_token"
     t.string "encrypted_access_token_secret"
     t.string "salt"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["handle"], name: "index_users_on_handle"
-    t.index ["provider", "uid"], name: "index_users_on_uid", unique: true
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 
   add_foreign_key "circle_spaces", "events", name: "fk_events_on_circle_spaces", on_update: :cascade, on_delete: :nullify
