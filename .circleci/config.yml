@@ -30,12 +30,23 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            make init
+            cp dotenv.dist .env
+            npm install
+            bundle install --path vendor/bundle --jobs=4 --retry=3 --without=development
 
       - save_cache:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.0
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
 
       # Database setup
       - run: make db-reset
@@ -44,4 +55,4 @@ jobs:
       - run:
           name: run tests
           command: |
-            bundle exec rails test
+            make test
