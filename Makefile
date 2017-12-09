@@ -21,6 +21,10 @@ db-migrate:
 db-migrate-dry-run:
 	bundle exec rake ridgepole:dry_run
 
+.PHONY: seed
+seed:
+	bundle exec rake db:seed
+
 .PHONY: db-reset
 db-reset:
 	bundle exec rake ridgepole:reset

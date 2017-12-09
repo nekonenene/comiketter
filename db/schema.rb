@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント" do |t|
     t.string "code", null: false, comment: "comike93 など、イベントを一意で示すID文字列"
     t.string "display_name", comment: "コミックマーケット93 などイベント名"
+    t.date "start_date", comment: "開催開始日"
+    t.integer "days", default: 1, comment: "開催期間", unsigned: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_events_on_code", unique: true
