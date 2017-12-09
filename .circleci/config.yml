@@ -38,7 +38,7 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       # Database setup
-      - run: make db-migrate
+      - run: make db-reset
 
       # run tests!
       - run:
