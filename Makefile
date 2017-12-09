@@ -13,6 +13,10 @@ run:
 	bundle exec spring stop
 	bundle exec foreman start
 
+.PHONY: test
+test:
+	bundle exec rails test
+
 .PHONY: db-migrate
 db-migrate:
 	bundle exec rake ridgepole:apply

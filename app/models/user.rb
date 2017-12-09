@@ -63,14 +63,14 @@ class User < ApplicationRecord
   end
 
   # uuser.salt を基に暗号化をおこなう
-  # @param [String] 生の文字列
+  # @param [String] message 生の文字列
   # @return [String] 暗号化された文字列
   def encrypt_message(message)
     encryptor.encrypt_and_sign(message)
   end
 
   # user.salt を基に復号をおこなう
-  # @param [String] 暗号化された文字列
+  # @param [String] encrypted_message 暗号化された文字列
   # @return [String] 復号された文字列
   def decrypt_message(encrypted_message)
     encryptor.decrypt_and_verify(encrypted_message)
