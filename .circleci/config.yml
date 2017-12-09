@@ -33,7 +33,7 @@ jobs:
             cp dotenv.dist .env
             npm install
             gem install bundler
-            bundle install --path vendor/bundle --jobs=4 --retry=3 --without=development
+            bundle install --path vendor/bundle --jobs=4 --retry=3
 
       - save_cache:
           paths:
