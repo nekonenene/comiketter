@@ -24,4 +24,35 @@ class CircleSpace < ApplicationRecord
   belongs_to :user
   belongs_to :event
 
+  class << self
+    def create_or_update_by_username(username, event_code: "comike93")
+      space_info = CircleSpaceService.analyze_space_from_username(username)
+
+      if space_info[:space_prefix].present? && space_info[:space_number].present?
+        event = Event.find_by(code: event_code)
+        user = User.find_by!(username: username)
+        space = CircleSpace.find_by(user: user, event: event)
+
+        if space.nil?
+          CircleSpace.create({
+            user: user,
+            event: event,
+            day: space_info[:day],
+            hall_name: space_info[:hall_name],
+            space_prefix: space_info[:space_prefix],
+            space_number: space_info[:space_number],
+            space_side: space_info[:space_side],
+          })
+        else
+          space.update({
+            day: space_info[:day],
+            hall_name: space_info[:hall_name],
+            space_prefix: space_info[:space_prefix],
+            space_number: space_info[:space_number],
+            space_side: space_info[:space_side],
+          })
+        end
+      end
+    end
+  end
 end

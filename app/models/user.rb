@@ -31,6 +31,8 @@ class User < ApplicationRecord
   has_many :followers, through: :user_follower_users # followers of user
   has_many :friends, through: :user_follower_followers # following users
 
+  after_commit :create_or_update_circle_space, on: [:create, :update]
+
   def update_followers(followers)
     user_followers = []
 
@@ -203,5 +205,12 @@ class User < ApplicationRecord
         user
       end
     end
+  end
+
+  private
+
+  # User が
+  def create_or_update_circle_space
+    CircleSpace.create_or_update_by_username(self.username)
   end
 end
