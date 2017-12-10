@@ -13,6 +13,12 @@
             | フォロー・フォロワー一覧のExcelデータをダウンロード
       .col.s12
         p.light （フォロー・フォロワー一覧はTwitter APIの仕様上、それぞれ最大3,000件までしか取得できません。ぐぬぬ……）
+    .row
+      .col.s12
+        a href="#{export_path(format: :xlsx, event_code: "comike93")}"
+          button.waves-effect.waves-light.btn-large
+            i.material-icons.left file_download
+            | C93参加フォロー・フォロワー一覧のExcelデータをダウンロード
 
 .container
   .section

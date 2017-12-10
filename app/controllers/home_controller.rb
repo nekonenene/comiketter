@@ -17,7 +17,10 @@ class HomeController < ApplicationController
       return redirect_to root_path
     end
 
-    filename = "twitter_list_" + Time.zone.now.to_date.to_s
+    @event_code = params[:event_code]
+
+    filename = @event_code + "_" if @event_code.present?
+    filename = filename.to_s + "twitter_list_" + Time.zone.now.to_date.to_s
     send_data(
       render_to_string.to_stream.read,
       type: :xlsx,
