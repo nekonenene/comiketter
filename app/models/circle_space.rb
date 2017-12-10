@@ -8,7 +8,7 @@
 #  day          :integer          unsigned
 #  hall_name    :string(32)
 #  space_prefix :string(8)
-#  space_number :integer          unsigned
+#  space_number :string(8)
 #  space_side   :string(8)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

@@ -2,7 +2,6 @@
 #
 # Table name: user_followers
 #
-#  id               :integer          not null, primary key
 #  user_id          :integer          not null
 #  follower_user_id :integer          not null
 #

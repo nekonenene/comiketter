@@ -5,6 +5,8 @@
 #  id           :integer          not null, primary key
 #  code         :string(255)      not null
 #  display_name :string(255)
+#  start_date   :date
+#  days         :integer          default(1), unsigned
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
