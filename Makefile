@@ -1,7 +1,6 @@
 .PHONY: init
 init:
 	cp dotenv.dist .env
-	npm install
 	gem install bundler
 	bundle install
 	bundle exec rails db:create
