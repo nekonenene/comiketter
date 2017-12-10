@@ -209,8 +209,11 @@ class User < ApplicationRecord
 
   private
 
-  # User が
+  # User が作成・更新されたときに CircleSpace 作成
   def create_or_update_circle_space
-    CircleSpace.create_or_update_by_username(self.username)
+    now = Time.zone.now
+    if now <= "2017-12-31 16:00".to_time
+      CircleSpace.create_or_update_by_username(self.username, event_code: "comike93")
+    end
   end
 end
