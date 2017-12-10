@@ -30,17 +30,13 @@ class CircleSpaceService
       normalized = normalize_str(username)
       normalized = kanji_to_num(normalized)
       normalized.delete!("- \"")
+      normalized.gsub!(/C9[3-9]/i, "") # C島は60までしか存在しない
 
-      matched = normalized.scan(/([0-9]{2})([ab]{1,2})/)
-      if matched.present?
-        space_number = matched.last[0]
-        space_side = matched.last[1]
-      end
-
-      matched = normalized.scan(/([A-Zあ-んア-ン])([0-9]{2})/)
+      matched = normalized.scan(/([A-Zあ-んア-ン])([0-9]{2})([ab]{1,2})/)
       if matched.present?
         space_prefix = matched.last[0]
-        space_number ||= matched.last[1]
+        space_number = matched.last[1]
+        space_side = matched.last[2]
       end
 
       matched = normalized.match(/(東|西)[1-9]/)
@@ -51,12 +47,22 @@ class CircleSpaceService
 
       # FIXME: 金曜を1日目と決めつけてしまっている
       if day.nil?
-        if normalized =~ /(金曜|@金)/
-          day = 1
-        elsif normalized =~ /(土曜|@土)/
-          day = 2
-        elsif normalized =~ /(日曜|@日)/
-          day = 3
+        weekday_days = {"金": 1, "土": 2, "日": 3}
+
+        weekday_days.each{ |key, value|
+          if normalized =~ /(#{key}曜|@#{key}|\(#{key}\)|#{key}(東|西))/
+            day = value
+            break # 土曜日東館 が日曜と判断されないために break 必須
+          end
+        }
+      end
+
+      # ホール名・日付のいずれかがある場合は、abの記載がないスペース番号を許す
+      if hall_name.present? || day.present?
+        matched = normalized.scan(/([A-Zあ-んア-ン])([0-9]{2})/)
+        if matched.present?
+          space_prefix ||= matched.last[0]
+          space_number ||= matched.last[1]
         end
       end
 
