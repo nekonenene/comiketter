@@ -1,7 +1,7 @@
 .container
   .section
     / = render "layouts/alerts"
-    h3.header ようこそ#{current_user.username}さん！
+    h2.header C93に参加しそうな人一覧
 
 .container
   .section
@@ -12,29 +12,37 @@
             i.material-icons.left file_download
             | フォロー・フォロワー一覧のExcelデータをダウンロード
       .col.s12
-        p.light （フォロー・フォロワー一覧はTwitter APIの仕様上、最大3,000件までしか取得できません。ぐぬぬ……）
+        p.light （フォロー・フォロワー一覧はTwitter APIの仕様上、それぞれ最大3,000件までしか取得できません。ぐぬぬ……）
+
+.container
   .section
     .row
-      .col.s6
-        - friends = current_user.friends
-        h4 フォローしてる人（#{friends.count}人）
-        - friends.each do |user|
+      .col.s12
+        h4.header フォロー中（#{@friends_c93.count}人）
+        - @friends_c93.each do |user|
+          - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
           .row
-            .col.s2.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
-            .col.s10.l5.xl4 = link_to "@" + user.handle, twitter_user_url(user.handle)
-            .col.s12.l6.xl7
+            .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s6.m3.l2
+              | #{space.space_prefix}#{space.space_number}#{space.space_side}
+              | #{"（" + space.day.to_s + "日目）" if space.day.present?}
+            .col.s12.m5.l6
               - if user.website_url.present?
                 = link_to user.username, user.website_url
               - else
                 | #{user.username}
-      .col.s6
-        - followers = current_user.followers
-        h4 フォローしてくれてる人（#{followers.count}人）
-        - followers.each do |user|
+      .col.s12
+        h4.header フォロワー（#{@followers_c93.count}人）
+        - @followers_c93.each do |user|
+          - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
           .row
-            .col.s2.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
-            .col.s10.l5.xl4 = link_to "@" + user.handle, twitter_user_url(user.handle)
-            .col.s12.l6.xl7
+            .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s6.m3.l2
+              | #{space.space_prefix}#{space.space_number}#{space.space_side}
+              | #{"（" + space.day.to_s + "日目）" if space.day.present?}
+            .col.s12.m5.l6
               - if user.website_url.present?
                 = link_to user.username, user.website_url
               - else
