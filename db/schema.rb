@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.bigint "event_id"
     t.integer "day", limit: 1, comment: "参戦日", unsigned: true
     t.string "hall_name", limit: 32, comment: "東1, 西3などの館名"
-    t.string "space_prefix", limit: 8, comment: "キ23aにおけるキ"
-    t.integer "space_number", limit: 2, comment: "キ23aにおける23", unsigned: true
-    t.string "space_side", limit: 8, comment: "キ23aにおけるa"
+    t.string "space_prefix", limit: 8, comment: "キ09aにおけるキ"
+    t.string "space_number", limit: 8, comment: "キ09aにおける09"
+    t.string "space_side", limit: 8, comment: "キ09aにおけるa"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_circle_spaces_on_event_id"

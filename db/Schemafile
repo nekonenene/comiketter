@@ -51,9 +51,9 @@ create_table :circle_spaces, force: :cascade, options: "ENGINE=InnoDB DEFAULT CH
   t.bigint :event_id
   t.unsigned_integer :day,          limit: 1,  comment: "参戦日"
   t.string           :hall_name,    limit: 32, comment: "東1, 西3などの館名"
-  t.string           :space_prefix, limit: 8,  comment: "キ23aにおけるキ"
-  t.unsigned_integer :space_number, limit: 2,  comment: "キ23aにおける23"
-  t.string           :space_side,   limit: 8,  comment: "キ23aにおけるa"
+  t.string           :space_prefix, limit: 8,  comment: "キ09aにおけるキ"
+  t.string           :space_number, limit: 8,  comment: "キ09aにおける09"
+  t.string           :space_side,   limit: 8,  comment: "キ09aにおけるa"
   t.timestamps
 
   t.index :user_id
