@@ -33,7 +33,7 @@ jobs:
             cp dotenv.dist .env
             npm install
             gem install bundler
-            bundle install --path vendor/bundle --jobs=4 --retry=3
+            bundle install --path vendor/bundle --jobs=4 --retry=3 --without=development
 
       - save_cache:
           paths:
@@ -44,11 +44,9 @@ jobs:
           name: Wait for MySQL
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
 
-      # Database setup
-      - run: make db-reset
-
       # run tests!
       - run:
           name: run tests
           command: |
+            bundle exec rails db:create:all
             make test
