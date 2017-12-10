@@ -4,6 +4,7 @@ init:
 	npm install
 	gem install bundler
 	bundle install
+	bundle exec rails db:create
 	bundle exec rails tmp:create
 	mkdir -p log
 	bundle exec rails log:clear
