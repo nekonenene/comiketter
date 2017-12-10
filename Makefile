@@ -22,9 +22,17 @@ test:
 db-migrate:
 	bundle exec rake ridgepole:apply
 
+.PHONY: db-migrate-production
+db-migrate-production:
+	bundle exec rake ridgepole:apply RAILS_ENV=production
+
 .PHONY: db-migrate-dry-run
 db-migrate-dry-run:
 	bundle exec rake ridgepole:dry_run
+
+.PHONY: db-migrate-dry-run-production
+db-migrate-dry-run-production:
+	bundle exec rake ridgepole:dry_run RAILS_ENV=production
 
 .PHONY: seed
 seed:
