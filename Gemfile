@@ -66,7 +66,11 @@ group :development do
   ## Adding - development
   gem "annotate"
   gem "foreman"
+  gem "guard"
+  gem "guard-minitest"
   gem "pry-rails"
+  gem "terminal-notifier"
+  gem "terminal-notifier-guard"
   gem "yard"
 end
 
