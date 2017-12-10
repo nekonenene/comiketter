@@ -42,7 +42,7 @@ class CircleSpaceService
       matched = normalized.match(/(東|西)[1-9]/)
       hall_name = matched[0] if matched.present?
 
-      matched = normalized.scan(/([1-3])日/)
+      matched = normalized.scan(/([1-3])日目/)
       day = matched.last[0] if matched.present?
 
       # FIXME: 金曜を1日目と決めつけてしまっている
