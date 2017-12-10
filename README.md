@@ -1,24 +1,30 @@
-# README
+# Comiketter
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Comiketterは、Twitterのフォロー・フォロワーを取得し、  
+ユーザー名からサークルスペースを推測し、一覧で表示してくれるサービスです。
 
-Things you may want to cover:
+## 必要環境
 
-* Ruby version
+* Ruby 2.4.2
+* MySQL 5.7
 
-* System dependencies
+Ruby のインストールには [rbenv](https://github.com/rbenv/rbenv) の使用をお勧めします。
 
-* Configuration
+## 開発を始めるには
 
-* Database creation
+このリポジトリを `git clone` したのち、
 
-* Database initialization
+```bash
+make init
+```
 
-* How to run the test suite
+`.env` ファイルがトップディレクトリに作られるので、  
+DATABASE_USERNAME, DATABASE_PASSWORD などを環境に合わせて編集してください。
 
-* Services (job queues, cache servers, search engines, etc.)
+以下のコマンドでローカルサーバーが起動します。
 
-* Deployment instructions
+```bash
+make run
+```
 
-* ...
+http://localhost:15300 にアクセスし、トップページが表示されていたら成功です。
