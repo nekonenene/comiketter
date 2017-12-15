@@ -23,32 +23,32 @@
 .container
   .section
     .row
-      .col.s12
+      .col.s12.xl6
         h4.header フォロー中（#{@friends_c93.count}人）
         - @friends_c93.each do |user|
           - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
           .row
-            .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
-            .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
-            .col.s6.m3.l2
+            .col.s1.m1.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s5.m3.l3.xl5 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s6.m3.l2.xl6
               | #{space.space_prefix}#{space.space_number}#{space.space_side}
               | #{"（" + space.day.to_s + "日目）" if space.day.present?}
-            .col.s12.m5.l6
+            .col.s12.m5.l6.xl12
               - if user.website_url.present?
                 = link_to user.username, user.website_url
               - else
                 | #{user.username}
-      .col.s12
+      .col.s12.xl6
         h4.header フォロワー（#{@followers_c93.count}人）
         - @followers_c93.each do |user|
           - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
           .row
-            .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
-            .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
-            .col.s6.m3.l2
+            .col.s1.m1.l1.xl1 = image_tag user.icon_url, style: "height: 2rem"
+            .col.s5.m3.l3.xl5 = link_to "@" + user.handle, twitter_user_url(user.handle)
+            .col.s6.m3.l2.xl6
               | #{space.space_prefix}#{space.space_number}#{space.space_side}
               | #{"（" + space.day.to_s + "日目）" if space.day.present?}
-            .col.s12.m5.l6
+            .col.s12.m5.l6.xl12
               - if user.website_url.present?
                 = link_to user.username, user.website_url
               - else
