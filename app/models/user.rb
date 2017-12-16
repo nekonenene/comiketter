@@ -37,33 +37,51 @@ class User < ApplicationRecord
   # 配列からユーザーのフォロワー一覧を更新
   # @param [Array<Hash>] followers Twitter APIから取得したフォロワー一覧
   def update_followers(followers)
+    users = []
     user_followers = []
 
     followers.each{ |follower|
-      user = User.create_or_update_follower_or_friends(follower)
+      user = User.find_or_new_by_follower_or_friends_api(follower)
+      users << user
       user_followers << UserFollower.new(user: self, follower_user: user)
     }
 
-    UserFollower.transaction do
-      UserFollower.where(user: self).delete_all
-      UserFollower.import user_followers
+    User.transaction do
+      UserFollower.transaction do
+        User.import users
+        UserFollower.where(user: self).delete_all
+        UserFollower.import user_followers
+      end
     end
+
+    users.each{ |user|
+      user.create_or_update_circle_space
+    }
   end
 
   # 配列からユーザーのフレンズ一覧を更新
   # @param [Array<Hash>] followers Twitter APIから取得したフォローイング一覧
   def update_friends(friends)
+    users = []
     user_followers = []
 
     friends.each{ |friends|
-      user = User.create_or_update_follower_or_friends(friends)
+      user = User.find_or_new_by_follower_or_friends_api(friends)
+      users << user
       user_followers << UserFollower.new(user: user, follower_user: self)
     }
 
-    UserFollower.transaction do
-      UserFollower.where(follower_user: self).delete_all
-      UserFollower.import user_followers
+    User.transaction do
+      UserFollower.transaction do
+        User.import users
+        UserFollower.where(follower_user: self).delete_all
+        UserFollower.import user_followers
+      end
     end
+
+    users.each{ |user|
+      user.create_or_update_circle_space
+    }
   end
 
   # @return [MessageEncryptor]
@@ -91,6 +109,20 @@ class User < ApplicationRecord
   # @return [String]
   def access_token_secret
     decrypt_message(self.encrypted_access_token_secret)
+  end
+
+  # User が作成・更新されたときに CircleSpace 作成
+  def find_or_new_circle_space
+    now = Time.zone.now
+    if now <= "2017-12-31 16:00".to_time
+      CircleSpace.find_or_new_by_username(self.username, event_code: "comike93")
+    end
+  end
+
+  # User が作成・更新されたときに CircleSpace 作成
+  def create_or_update_circle_space
+    space = find_or_new_circle_space
+    space.save! if space.present?
   end
 
   class << self
@@ -123,26 +155,21 @@ class User < ApplicationRecord
 
     # フォロワー・フレンズのUserモデルをAPI情報から作成または更新
     # @param [Hash] user_info Twitter APIから取得したユーザー情報
-    def create_or_update_follower_or_friends(user_info, provider: "twitter")
+    def find_or_new_by_follower_or_friends_api(user_info, provider: "twitter")
       uid = user_info[:id]
 
-      User.transaction do
-        uid = user_info[:id]
+      user = User.find_by(provider: provider, uid: uid)
+      user = User.new if user.nil?
 
-        user = User.find_by(provider: provider, uid: uid)
-        user = User.new if user.nil?
-
-        user.provider = provider
-        user.uid = uid
-        user.handle = user_info[:screen_name]
-        user.username = user_info[:name]
-        user.icon_url = user_info[:profile_image_url_https]
-        user.website_url = user_info.dig(:entities, :url, :urls, 0, :expanded_url)
-        user.followers_count = user_info[:followers_count]
-        user.friends_count = user_info[:friends_count]
-        user.save!
-        user
-      end
+      user.provider = provider
+      user.uid = uid
+      user.handle = user_info[:screen_name]
+      user.username = user_info[:name]
+      user.icon_url = user_info[:profile_image_url_https]
+      user.website_url = user_info.dig(:entities, :url, :urls, 0, :expanded_url)
+      user.followers_count = user_info[:followers_count]
+      user.friends_count = user_info[:friends_count]
+      user
     end
 
     private
@@ -211,16 +238,6 @@ class User < ApplicationRecord
       end
 
       user
-    end
-  end
-
-  private
-
-  # User が作成・更新されたときに CircleSpace 作成
-  def create_or_update_circle_space
-    now = Time.zone.now
-    if now <= "2017-12-31 16:00".to_time
-      CircleSpace.create_or_update_by_username(self.username, event_code: "comike93")
     end
   end
 end

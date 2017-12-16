@@ -27,12 +27,17 @@ class CircleSpace < ApplicationRecord
   validates :user_id, presence: true
 
   class << self
-    def create_or_update_by_username(username, event_code: "comike93")
+    def find_or_new_by_username(username, event_code: "comike93")
       space_info = CircleSpaceService.analyze_space_from_username(username)
 
       if space_info[:space_prefix].present? && space_info[:space_number].present?
         event = Event.find_by(code: event_code)
-        user = User.find_by!(username: username)
+        begin
+          user = User.find_by!(username: username)
+        rescue ActiveRecord::RecordNotFound => e
+          puts e.inspect
+          return nil
+        end
 
         space = CircleSpace.find_by(user: user, event: event)
         space = CircleSpace.new if space.nil?
@@ -44,7 +49,6 @@ class CircleSpace < ApplicationRecord
         space.space_prefix = space_info[:space_prefix]
         space.space_number = space_info[:space_number]
         space.space_side = space_info[:space_side]
-        space.save!
         space
       end
     end
