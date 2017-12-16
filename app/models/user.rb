@@ -123,30 +123,20 @@ class User < ApplicationRecord
       uid = user_info[:id]
 
       User.transaction do
+        uid = user_info[:id]
+
         user = User.find_by(provider: provider, uid: uid)
+        user = User.new if user.nil?
 
-        if user.nil?
-          user = User.create({
-            provider: provider,
-            uid: uid,
-            handle: user_info[:screen_name],
-            username: user_info[:name],
-            icon_url: user_info[:profile_image_url_https],
-            website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
-            followers_count: user_info[:followers_count],
-            friends_count: user_info[:friends_count],
-          })
-        else
-          user.update({
-            handle: user_info[:screen_name],
-            username: user_info[:name],
-            icon_url: user_info[:profile_image_url_https],
-            website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
-            followers_count: user_info[:followers_count],
-            friends_count: user_info[:friends_count],
-          })
-        end
-
+        user.provider = provider
+        user.uid = uid
+        user.handle = user_info[:screen_name]
+        user.username = user_info[:name]
+        user.icon_url = user_info[:profile_image_url_https]
+        user.website_url = user_info.dig(:entities, :url, :urls, 0, :expanded_url)
+        user.followers_count = user_info[:followers_count]
+        user.friends_count = user_info[:friends_count]
+        user.save!
         user
       end
     end
