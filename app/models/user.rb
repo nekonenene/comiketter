@@ -23,7 +23,8 @@
 
 class User < ApplicationRecord
 
-  CIPHER = "AES-256-CBC"
+  CIPHER = "AES-256-CBC".freeze
+  BATCH_SIZE = 200
 
   has_many :circle_spaces, dependent: :destroy
   has_many :user_follower_users, class_name: "UserFollower", foreign_key: :user_id, dependent: :destroy
@@ -43,20 +44,22 @@ class User < ApplicationRecord
     followers.each{ |follower|
       user = User.find_or_new_by_follower_or_friends_api(follower)
       users << user
-      user_followers << UserFollower.new(user: self, follower_user: user)
     }
 
     User.transaction do
-      UserFollower.transaction do
-        User.import users
-        UserFollower.where(user: self).delete_all
-        UserFollower.import user_followers
-      end
+      User.import users, batch_size: BATCH_SIZE
     end
 
     users.each{ |user|
+      # user は id を所持していないので、handleから検索する
+      user_followers << UserFollower.new(user: self, follower_user: User.find_by!(handle: user.handle))
       user.create_or_update_circle_space
     }
+
+    UserFollower.transaction do
+      UserFollower.where(user: self).delete_all
+      UserFollower.import user_followers, batch_size: BATCH_SIZE
+    end
   end
 
   # 配列からユーザーのフレンズ一覧を更新
@@ -68,20 +71,22 @@ class User < ApplicationRecord
     friends.each{ |friends|
       user = User.find_or_new_by_follower_or_friends_api(friends)
       users << user
-      user_followers << UserFollower.new(user: user, follower_user: self)
     }
 
     User.transaction do
-      UserFollower.transaction do
-        User.import users
-        UserFollower.where(follower_user: self).delete_all
-        UserFollower.import user_followers
-      end
+      User.import users, batch_size: BATCH_SIZE
     end
 
     users.each{ |user|
+      # user は id を所持していないので、handleから検索する
+      user_followers << UserFollower.new(user: User.find_by!(handle: user.handle), follower_user: self)
       user.create_or_update_circle_space
     }
+
+    UserFollower.transaction do
+      UserFollower.where(follower_user: self).delete_all
+      UserFollower.import user_followers, batch_size: BATCH_SIZE
+    end
   end
 
   # @return [MessageEncryptor]
@@ -123,6 +128,7 @@ class User < ApplicationRecord
   def create_or_update_circle_space
     space = find_or_new_circle_space
     space.save! if space.present?
+    space
   end
 
   class << self
