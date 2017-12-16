@@ -23,12 +23,36 @@
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+signin_user_1:
+  id: 1
+  handle: test
+  username: テスト先生@3日目あ11a
+  icon_url: nil
+  website_url: nil
+  followers_count: 350
+  friends_count: 500
+  provider: twitter
+  uid: 1122334455
+  access_token: 1122334455-testTestTest
+  encrypted_access_token_secret: VmJnK2EwNGJRTkI2NVBKVVpBb0hGdz09LS1KeXhEQmRBTmNrMWRPWTNuck5Pb2xBPT0=--25aa400a925b57808144c614955aec24e67176a1 # access_token_secret: test
+  salt: 615525248d6497cb67b20ba04aebf38467198b38f50ce95a7ed6eb79659aa4a3d7b5cb1b0806d8ecadffb04de011deb94c558f18ca377531d4c9ec6e6798cb80
+
+participant_1:
+  handle: test
+  username: ツイッタラー@1日目ふ11a
+  icon_url: nil
+  website_url: nil
+  followers_count: 350
+  friends_count: 500
+  provider: twitter
+  uid: 111111
+
+participant_2:
+  handle: test
+  username: ツイッタラー@2日目K22a
+  icon_url: nil
+  website_url: nil
+  followers_count: 350
+  friends_count: 500
+  provider: twitter
+  uid: 111112

@@ -34,6 +34,8 @@ class User < ApplicationRecord
   validates :uid, uniqueness: { scope: :provider }
   after_commit :create_or_update_circle_space, on: [:create, :update]
 
+  # 配列からユーザーのフォロワー一覧を更新
+  # @param [Array<Hash>] followers Twitter APIから取得したフォロワー一覧
   def update_followers(followers)
     user_followers = []
 
@@ -48,6 +50,8 @@ class User < ApplicationRecord
     end
   end
 
+  # 配列からユーザーのフレンズ一覧を更新
+  # @param [Array<Hash>] followers Twitter APIから取得したフォローイング一覧
   def update_friends(friends)
     user_followers = []
 
