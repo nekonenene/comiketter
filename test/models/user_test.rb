@@ -67,18 +67,27 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "add comike93 space when create user" do
-    users_count = User.count
-    spaces_count = CircleSpace.count
-
-    user = User.new
-
     Timecop.travel("2017-12-28") do
+      users_count = User.count
+      spaces_count = CircleSpace.count
+
+      user = User.new
+
       user.handle = "test"
       user.username = "AAA@2日目 A13a"
       user.save!
-    end
 
-    assert_equal(1, User.count - users_count)
-    assert_equal(1, CircleSpace.count - spaces_count)
+      assert_equal(1, User.count - users_count)
+      assert_equal(1, CircleSpace.count - spaces_count)
+      assert_equal(1, user.circle_spaces.count)
+      assert_equal("13", user.circle_spaces.last.space_number)
+
+      # ユーザー情報が更新されたとき
+      user.username = "AAA@3日目 A33b"
+      user.save!
+
+      assert_equal(1, user.circle_spaces.count)
+      assert_equal("33", user.circle_spaces.last.space_number)
+    end
   end
 end
