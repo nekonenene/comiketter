@@ -2,6 +2,9 @@
   .section
     / = render "layouts/alerts"
     h2.header C93に参加しそうな人一覧
+    - message = "冬のコミケに参加するフォロワーさんは#{@followers_c93.count}人、フォローしてる人は#{@friends_c93.count}人だよ！ - Comiketter"
+    a.twitter-share-button href="https://twitter.com/share" data-size="large" data-lang="en" data-url="https://comiketter.hatonekoe.tokyo" data-hashtags="comiketter" data-text="#{message}"
+      | つぶやこう！
 
 .container
   .section
@@ -53,3 +56,20 @@
                 = link_to user.username, user.website_url
               - else
                 | #{user.username}
+
+javascript:
+  window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+    return t;
+  }(document, "script", "twitter-wjs"));
