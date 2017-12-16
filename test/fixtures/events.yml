@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id           :integer          not null, primary key
+#  code         :string(255)      not null
+#  display_name :string(255)
+#  start_date   :date
+#  days         :integer          default(1), unsigned
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+c93:
+  code: comike93
+  display_name: コミックマーケット93
+  start_date: 2017-12-29
+  days: 3

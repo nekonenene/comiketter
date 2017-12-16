@@ -65,4 +65,20 @@ class UserTest < ActiveSupport::TestCase
     UserFollower.create!(user: users(:participant_2), follower_user: user)
     assert_equal(2, user.friends.count)
   end
+
+  test "add comike93 space when create user" do
+    users_count = User.count
+    spaces_count = CircleSpace.count
+
+    user = User.new
+
+    Timecop.travel("2017-12-28") do
+      user.handle = "test"
+      user.username = "AAA@2日目 A13a"
+      user.save!
+    end
+
+    assert_equal(1, User.count - users_count)
+    assert_equal(1, CircleSpace.count - spaces_count)
+  end
 end
