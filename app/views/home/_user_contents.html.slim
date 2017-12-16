@@ -2,8 +2,8 @@
   .section
     / = render "layouts/alerts"
     h2.header C93に参加しそうな人一覧
-    - message = "冬のコミケに参加するフォロワーさんは#{@followers_c93.count}人、フォローしてる人は#{@friends_c93.count}人だよ！ - Comiketter"
-    a.twitter-share-button href="https://twitter.com/share" data-size="large" data-lang="en" data-url="https://comiketter.hatonekoe.tokyo" data-hashtags="comiketter" data-text="#{message}"
+    - tweet_message = "冬のコミケに参加するフォロワーさんは#{@followers_c93.count}人、フォローしてる人は#{@friends_c93.count}人だよ！ - #{app_name}"
+    a.twitter-share-button href="https://twitter.com/share" data-size="large" data-lang="en" data-url="#{root_url}" data-hashtags="comiketter" data-text="#{tweet_message}"
       | つぶやこう！
 
 .container
