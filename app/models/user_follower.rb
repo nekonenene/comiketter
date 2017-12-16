@@ -18,4 +18,7 @@ class UserFollower < ApplicationRecord
   belongs_to :follower_user, class_name: "User"
   belongs_to :follower, class_name: "User", foreign_key: :follower_user_id
 
+  validates :user_id, :follower_user_id, presence: true
+  validates :follower_user_id, uniqueness: { scope: :user_id }
+
 end

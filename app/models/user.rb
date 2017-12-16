@@ -31,6 +31,7 @@ class User < ApplicationRecord
   has_many :followers, through: :user_follower_users # followers of user
   has_many :friends, through: :user_follower_followers # following users
 
+  validates :uid, uniqueness: { scope: :provider }
   after_commit :create_or_update_circle_space, on: [:create, :update]
 
   def update_followers(followers)
@@ -41,8 +42,10 @@ class User < ApplicationRecord
       user_followers << UserFollower.new(user: self, follower_user: user)
     }
 
-    UserFollower.where(user: self).delete_all
-    UserFollower.import user_followers
+    UserFollower.transaction do
+      UserFollower.where(user: self).delete_all
+      UserFollower.import user_followers
+    end
   end
 
   def update_friends(friends)
@@ -53,8 +56,10 @@ class User < ApplicationRecord
       user_followers << UserFollower.new(user: user, follower_user: self)
     }
 
-    UserFollower.where(follower_user: self).delete_all
-    UserFollower.import user_followers
+    UserFollower.transaction do
+      UserFollower.where(follower_user: self).delete_all
+      UserFollower.import user_followers
+    end
   end
 
   # @return [MessageEncryptor]
@@ -116,30 +121,34 @@ class User < ApplicationRecord
     # @param [Hash] user_info Twitter APIから取得したユーザー情報
     def create_or_update_follower_or_friends(user_info, provider: "twitter")
       uid = user_info[:id]
-      user = User.find_by(provider: provider, uid: uid)
 
-      if user.nil?
-        user = User.create({
-          provider: provider,
-          uid: uid,
-          handle: user_info[:screen_name],
-          username: user_info[:name],
-          icon_url: user_info[:profile_image_url_https],
-          website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
-          followers_count: user_info[:followers_count],
-          friends_count: user_info[:friends_count],
-        })
-      else
-        user.update({
-          handle: user_info[:screen_name],
-          username: user_info[:name],
-          icon_url: user_info[:profile_image_url_https],
-          website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
-          followers_count: user_info[:followers_count],
-          friends_count: user_info[:friends_count],
-        })
+      User.transaction do
+        user = User.find_by(provider: provider, uid: uid)
+
+        if user.nil?
+          user = User.create({
+            provider: provider,
+            uid: uid,
+            handle: user_info[:screen_name],
+            username: user_info[:name],
+            icon_url: user_info[:profile_image_url_https],
+            website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
+            followers_count: user_info[:followers_count],
+            friends_count: user_info[:friends_count],
+          })
+        else
+          user.update({
+            handle: user_info[:screen_name],
+            username: user_info[:name],
+            icon_url: user_info[:profile_image_url_https],
+            website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
+            followers_count: user_info[:followers_count],
+            friends_count: user_info[:friends_count],
+          })
+        end
+
+        user
       end
-      user
     end
 
     private
@@ -176,16 +185,19 @@ class User < ApplicationRecord
     # @param [Hash] auth_user_info 認証元から取得したユーザー情報
     # @return [User]
     def update_user_info(user, auth_user_info)
-      user.update({
-        handle: auth_user_info[:handle],
-        username: auth_user_info[:username],
-        icon_url: auth_user_info[:icon_url],
-        website_url: auth_user_info[:website_url],
-        followers_count: auth_user_info[:followers_count],
-        friends_count: auth_user_info[:friends_count],
-        last_signin_at: Time.zone.now,
-      })
-      update_access_token(user, auth_user_info) if user.access_token != auth_user_info[:access_token]
+      User.transaction do
+        user.update({
+          handle: auth_user_info[:handle],
+          username: auth_user_info[:username],
+          icon_url: auth_user_info[:icon_url],
+          website_url: auth_user_info[:website_url],
+          followers_count: auth_user_info[:followers_count],
+          friends_count: auth_user_info[:friends_count],
+          last_signin_at: Time.zone.now,
+        })
+        update_access_token(user, auth_user_info) if user.access_token != auth_user_info[:access_token]
+      end
+
       user
     end
 
@@ -202,8 +214,9 @@ class User < ApplicationRecord
         user.update(access_token: auth_user_info[:access_token])
         encrypted_access_token_secret = user.encrypt_message(auth_user_info[:access_token_secret])
         user.update(encrypted_access_token_secret: encrypted_access_token_secret)
-        user
       end
+
+      user
     end
   end
 

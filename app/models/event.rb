@@ -15,4 +15,6 @@ class Event < ApplicationRecord
 
   has_many :circle_spaces, dependent: :nullify
 
+  validates :code, presence: true
+
 end
