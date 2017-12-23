@@ -38,24 +38,12 @@ class User < ApplicationRecord
   # 配列からユーザーのフォロワー一覧を更新
   # @param [Array<Hash>] followers Twitter APIから取得したフォロワー一覧
   def update_followers(followers)
-    users = []
     user_followers = []
 
     followers.each{ |follower|
-      user = User.find_or_new_by_follower_or_friends_api(follower)
-      users << user
-    }
-
-    User.transaction do
-      User.import users, batch_size: BATCH_SIZE
-    end
-
-    users.each{ |user|
-      # user は id を所持していないので、handleから検索する
-      follower = User.find_by(handle: user.handle)
-      next if follower.nil? # handle でユーザーが見つからない場合、以降の処理ができないのでスキップ
-      user_followers << UserFollower.new(user: self, follower_user: follower)
-      follower.create_or_update_circle_space
+      user = User.create_or_update_by_follower_or_friends_api(follower)
+      user_followers << UserFollower.new(user: self, follower_user: user)
+      user.create_or_update_circle_space
     }
 
     UserFollower.transaction do
@@ -67,24 +55,12 @@ class User < ApplicationRecord
   # 配列からユーザーのフレンズ一覧を更新
   # @param [Array<Hash>] followers Twitter APIから取得したフォローイング一覧
   def update_friends(friends)
-    users = []
     user_followers = []
 
-    friends.each{ |friends|
-      user = User.find_or_new_by_follower_or_friends_api(friends)
-      users << user
-    }
-
-    User.transaction do
-      User.import users, batch_size: BATCH_SIZE
-    end
-
-    users.each{ |user|
-      # user は id を所持していないので、handleから検索する
-      friend = User.find_by(handle: user.handle)
-      next if friend.nil? # handle でユーザーが見つからない場合、以降の処理ができないのでスキップ
-      user_followers << UserFollower.new(user: friend, follower_user: self)
-      friend.create_or_update_circle_space
+    friends.each{ |friend|
+      user = User.create_or_update_by_follower_or_friends_api(friend)
+      user_followers << UserFollower.new(user: user, follower_user: self)
+      user.create_or_update_circle_space
     }
 
     UserFollower.transaction do
@@ -131,7 +107,17 @@ class User < ApplicationRecord
   # User が作成・更新されたときに CircleSpace 作成
   def create_or_update_circle_space
     space = find_or_new_circle_space
-    space.save! if space.present?
+
+    fail_count = 0
+    begin
+      space.save! if space.present?
+    rescue => e
+      fail_count += 1
+      raise e if fail_count >= 5
+      sleep 2
+      retry
+    end
+
     space
   end
 
@@ -165,21 +151,46 @@ class User < ApplicationRecord
 
     # フォロワー・フレンズのUserモデルをAPI情報から作成または更新
     # @param [Hash] user_info Twitter APIから取得したユーザー情報
-    def find_or_new_by_follower_or_friends_api(user_info, provider: "twitter")
+    def create_or_update_by_follower_or_friends_api(user_info, provider: "twitter")
       uid = user_info[:id]
+      fail_count = 0
 
-      user = User.find_by(provider: provider, uid: uid)
-      user = User.new if user.nil?
+      User.transaction do
+        begin
+          user = User.find_by(provider: provider, uid: uid)
 
-      user.provider = provider
-      user.uid = uid
-      user.handle = user_info[:screen_name]
-      user.username = user_info[:name]
-      user.icon_url = user_info[:profile_image_url_https]
-      user.website_url = user_info.dig(:entities, :url, :urls, 0, :expanded_url)
-      user.followers_count = user_info[:followers_count]
-      user.friends_count = user_info[:friends_count]
-      user
+          if user.nil?
+            user = User.create!({
+              provider: provider,
+              uid: uid,
+              handle: user_info[:screen_name],
+              username: user_info[:name],
+              icon_url: user_info[:profile_image_url_https],
+              website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
+              followers_count: user_info[:followers_count],
+              friends_count: user_info[:friends_count],
+            })
+          else
+            user.update!({
+              provider: provider,
+              uid: uid,
+              handle: user_info[:screen_name],
+              username: user_info[:name],
+              icon_url: user_info[:profile_image_url_https],
+              website_url: user_info.dig(:entities, :url, :urls, 0, :expanded_url),
+              followers_count: user_info[:followers_count],
+              friends_count: user_info[:friends_count],
+            })
+          end
+
+          user
+        rescue => e
+          fail_count += 1
+          raise e if fail_count >= 5
+          sleep 3
+          retry
+        end
+      end
     end
 
     private
