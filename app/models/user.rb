@@ -52,8 +52,10 @@ class User < ApplicationRecord
 
     users.each{ |user|
       # user は id を所持していないので、handleから検索する
-      user_followers << UserFollower.new(user: self, follower_user: User.find_by!(handle: user.handle))
-      user.create_or_update_circle_space
+      follower = User.find_by(handle: user.handle)
+      next if follower.nil? # handle でユーザーが見つからない場合、以降の処理ができないのでスキップ
+      user_followers << UserFollower.new(user: self, follower_user: follower)
+      follower.create_or_update_circle_space
     }
 
     UserFollower.transaction do
@@ -79,8 +81,10 @@ class User < ApplicationRecord
 
     users.each{ |user|
       # user は id を所持していないので、handleから検索する
-      user_followers << UserFollower.new(user: User.find_by!(handle: user.handle), follower_user: self)
-      user.create_or_update_circle_space
+      friend = User.find_by(handle: user.handle)
+      next if friend.nil? # handle でユーザーが見つからない場合、以降の処理ができないのでスキップ
+      user_followers << UserFollower.new(user: friend, follower_user: self)
+      friend.create_or_update_circle_space
     }
 
     UserFollower.transaction do
