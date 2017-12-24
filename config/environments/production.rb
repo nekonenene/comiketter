@@ -1,6 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # オリジナルエラー画面の表示
+  config.exceptions_app = ErrorsController.action(:show)
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 

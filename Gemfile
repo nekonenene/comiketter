@@ -39,10 +39,12 @@ gem "activerecord-session_store"
 gem "axlsx", github: "randym/axlsx", branch: "master"
 gem "devise"
 gem "dotenv-rails"
+gem "exception_notification"
 gem "jquery-rails"
 gem "materialize-sass" # jquery-rails に依存
 gem "omniauth-twitter"
 gem "ridgepole"
+gem "slack-notifier" # for exception_notification
 gem "slim-rails"
 gem "twitter"
 
