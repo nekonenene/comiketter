@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    = csrf_meta_tags
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track": "reload"
+    = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    / Font Awesome
+    link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"
+
+  body
+    / メニューバー
+    nav.light-green
+      .nav-wrapper.container
+        = link_to "Comiketter", "/", class: "brand-logo left"
+      / ul.right
+      /   = link_to "ログアウト", auth_signout_path
+
+    / 本体
+    = yield
+
+    / フッター
+    footer.page-footer.light-blue.lighten-5
+      / .container.center
+      /   = link_to "ログアウト", auth_signout_path
+      .footer-copyright.green.darken-2
+        .container
+          a.light-blue-text.text-lighten-5.right href="//twitter.com/nekonenene" target="_blank"
+            | 作った人： ハトネコエ (@nekonenene)
