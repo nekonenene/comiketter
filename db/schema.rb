@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 0) do
 
-  create_table "circle_spaces", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント参加スペース" do |t|
+  create_table "circle_spaces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント参加スペース", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "event_id"
     t.integer "day", limit: 1, comment: "参戦日", unsigned: true
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["user_id"], name: "index_circle_spaces_on_user_id"
   end
 
-  create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント" do |t|
+  create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "イベント", force: :cascade do |t|
     t.string "code", null: false, collation: "utf8mb4_general_ci", comment: "comike93 など、イベントを一意で示すID文字列"
     t.string "display_name", comment: "コミックマーケット93 などイベント名"
     t.date "start_date", comment: "開催開始日"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["code"], name: "index_events_on_code", unique: true
   end
 
-  create_table "sessions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "for activerecord-session_store" do |t|
+  create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "for activerecord-session_store", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "user_followers", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル" do |t|
+  create_table "user_followers", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", comment: "フォロー・フォロワー関係テーブル", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "follower_user_id", null: false
     t.index ["follower_user_id"], name: "index_user_followers_on_follower_user_id"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["user_id"], name: "index_user_followers_on_user_id"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "provider", collation: "utf8mb4_general_ci"
     t.string "uid"
     t.string "handle", collation: "utf8mb4_general_ci", comment: "メンションに使われるID"
