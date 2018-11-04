@@ -4,7 +4,7 @@ class CircleSpaceServiceTest < ActiveSupport::TestCase
     assert_equal "ABCd123", CircleSpaceService.normalize_str("ＡＢＣd１２3")
     assert_equal "ハンカクカナですヨ", CircleSpaceService.normalize_str("ﾊﾝｶｸｶﾅですヨ")
     assert_equal "テスト@3日目(日)!!【東15a】", CircleSpaceService.normalize_str("テスト＠３日目（日）！！【東１５a】")
-    assert_equal 'テスト@C93 土曜日東地区"ク"-13a', CircleSpaceService.normalize_str("テスト＠C93 土曜日東地区“ク”－13a")
+    assert_equal 'テスト@C95 土曜日東地区"ク"-13a', CircleSpaceService.normalize_str("テスト＠C95 土曜日東地区“ク”－13a")
     assert_equal "テスト@1日目(土)東エ02a", CircleSpaceService.normalize_str("テスト@1日目(土)東エ02a")
   end
 
@@ -22,7 +22,7 @@ class CircleSpaceServiceTest < ActiveSupport::TestCase
         space_number: "13",
         space_side: "a",
       },
-      CircleSpaceService.analyze_space_from_username("テスト＠C93 土曜日東地区“ク”－13a")
+      CircleSpaceService.analyze_space_from_username("テスト＠C95 土曜日東地区“ク”－13a")
     )
 
     assert_equal(
@@ -44,7 +44,7 @@ class CircleSpaceServiceTest < ActiveSupport::TestCase
         space_number: "07",
         space_side: "b",
       },
-      CircleSpaceService.analyze_space_from_username("テスト[C93:な07b]‏")
+      CircleSpaceService.analyze_space_from_username("テスト[C95:な07b]‏")
     )
 
     assert_equal(
@@ -88,7 +88,7 @@ class CircleSpaceServiceTest < ActiveSupport::TestCase
         space_number: nil,
         space_side: nil,
       },
-      CircleSpaceService.analyze_space_from_username("テスト@コミケ（C93）一日目一般参加‏‏")
+      CircleSpaceService.analyze_space_from_username("テスト@コミケ（C95）一日目一般参加‏‏")
     )
 
     assert_equal(
@@ -110,7 +110,7 @@ class CircleSpaceServiceTest < ActiveSupport::TestCase
         space_number: "14",
         space_side: "b",
       },
-      CircleSpaceService.analyze_space_from_username("テスト＠ゆゆ式　C93土A-14b")
+      CircleSpaceService.analyze_space_from_username("テスト＠ゆゆ式　C95土A-14b")
     )
   end
 
