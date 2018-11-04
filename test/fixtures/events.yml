@@ -18,3 +18,9 @@ c93:
   display_name: コミックマーケット93
   start_date: 2017-12-29
   days: 3
+
+c95:
+  code: comike95
+  display_name: コミックマーケット95
+  start_date: 2018-12-29
+  days: 3

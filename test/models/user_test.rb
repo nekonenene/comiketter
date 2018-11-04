@@ -71,11 +71,7 @@ class UserTest < ActiveSupport::TestCase
       users_count = User.count
       spaces_count = CircleSpace.count
 
-      user = User.new
-
-      user.handle = "test"
-      user.username = "AAA@2日目 A13a"
-      user.save!
+      user = User.create!(handle: "test", username: "AAA@2日目 A13a")
 
       assert_equal(1, User.count - users_count)
       assert_equal(1, CircleSpace.count - spaces_count)
@@ -83,8 +79,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal("13", user.circle_spaces.last.space_number)
 
       # ユーザー情報が更新されたとき
-      user.username = "AAA@3日目 A33b"
-      user.save!
+      user.update!(username: "AAA@3日目 A33b")
 
       assert_equal(1, user.circle_spaces.count)
       assert_equal("33", user.circle_spaces.last.space_number)

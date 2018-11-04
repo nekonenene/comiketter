@@ -27,7 +27,9 @@ class CircleSpace < ApplicationRecord
   validates :user_id, presence: true
 
   class << self
-    def find_or_new_by_username(username, event_code: "comike93")
+    def find_or_new_by_username(username, event_code: nil)
+      raise "event_code should not be nil" if event_code.nil?
+
       space_info = CircleSpaceService.analyze_space_from_username(username)
 
       if space_info[:space_prefix].present? && space_info[:space_number].present?

@@ -45,9 +45,9 @@ class CircleSpaceService
       matched = normalized.scan(/([1-3])日目/)
       day = matched.last[0] if matched.present?
 
-      # FIXME: 金曜を1日目と決めつけてしまっている
+      # FIXME: 土曜を1日目と決めつけてしまっている
       if day.nil?
-        weekday_days = {"金": 1, "土": 2, "日": 3}
+        weekday_days = {"土": 1, "日": 2, "月": 3}
 
         weekday_days.each{ |key, value|
           if normalized =~ /(#{key}曜|@#{key}|\(#{key}\)|#{key}(東|西))/

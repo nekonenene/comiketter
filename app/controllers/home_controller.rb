@@ -5,9 +5,9 @@ class HomeController < ApplicationController
       user_data_api.update_followers
       user_data_api.update_friends
 
-      event_c93 = Event.find_by(code: "comike93")
-      @followers_c93 = @current_user.followers.select{|user| user.circle_spaces.find_by(event: event_c93).present?}
-      @friends_c93 = @current_user.friends.select{|user| user.circle_spaces.find_by(event: event_c93).present?}
+      @latest_event = Event.last
+      @followers_joining = @current_user.followers.select{ |user| user.circle_spaces.find_by(event: @latest_event).present? }
+      @friends_joining = @current_user.friends.select{ |user| user.circle_spaces.find_by(event: @latest_event).present? }
     end
   end
 

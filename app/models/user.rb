@@ -99,8 +99,14 @@ class User < ApplicationRecord
   # User が作成・更新されたときに CircleSpace 作成
   def find_or_new_circle_space
     now = Time.zone.now
-    if now <= "2017-12-31 16:00".to_time
-      CircleSpace.find_or_new_by_username(self.username, event_code: "comike93")
+
+    Event.find_each do |event|
+      start_time = (event.start_date - 3.months).to_time
+      end_time = event.start_date + event.days - 9.hours # 最終日15時までが対象
+
+      if start_time <= now && now <= end_time
+        return CircleSpace.find_or_new_by_username(self.username, event_code: event.code)
+      end
     end
   end
 

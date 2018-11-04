@@ -1,9 +1,9 @@
 .container
   .section
     / = render "layouts/alerts"
-    h2.header C93に参加しそうな人一覧
-    - tweet_message = "冬のコミケに参加するフォロワーさんは#{@followers_c93.count}人、フォローしてる人は#{@friends_c93.count}人だよ！ - #{app_name}"
-    a.twitter-share-button href="https://twitter.com/share" data-size="large" data-lang="en" data-url="#{root_url}" data-hashtags="comiketter,C93,コミケ" data-text="#{tweet_message}"
+    h2.header C95に参加しそうな人一覧
+    - tweet_message = "冬のコミケに参加するフォロワーさんは#{@followers_joining.count}人、フォローしてる人は#{@friends_joining.count}人だよ！ - #{app_name}"
+    a.twitter-share-button href="https://twitter.com/share" data-size="large" data-lang="en" data-url="#{root_url}" data-hashtags="comiketter,C95,コミケ" data-text="#{tweet_message}"
       | つぶやこう！
 
 .container
@@ -18,18 +18,18 @@
         p.light （フォロー・フォロワー一覧はTwitter APIの仕様上、それぞれ最大3,000件までしか取得できません。ぐぬぬ……）
     .row
       .col.s12
-        a href="#{export_path(format: :xlsx, event_code: "comike93")}"
+        a href="#{export_path(format: :xlsx, event_code: @latest_event.code)}"
           button.waves-effect.waves-light.btn-large
             i.material-icons.left file_download
-            | C93参加フォロー・フォロワー一覧のExcelデータをダウンロード
+            | C95参加フォロー・フォロワー一覧のExcelデータをダウンロード
 
 .container
   .section
     .row
       .col.s12
-        h4.header フォロー中（#{@friends_c93.count}人）
-        - @friends_c93.each do |user|
-          - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
+        h4.header フォロー中（#{@friends_joining.count}人）
+        - @friends_joining.each do |user|
+          - space = user.circle_spaces.find_by(event: Event.find_by(code: @latest_event.code))
           .row
             .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
             .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
@@ -42,9 +42,9 @@
               - else
                 | #{user.username}
       .col.s12
-        h4.header フォロワー（#{@followers_c93.count}人）
-        - @followers_c93.each do |user|
-          - space = user.circle_spaces.find_by(event: Event.find_by(code: "comike93"))
+        h4.header フォロワー（#{@followers_joining.count}人）
+        - @followers_joining.each do |user|
+          - space = user.circle_spaces.find_by(event: Event.find_by(code: @latest_event.code))
           .row
             .col.s1.m1.l1 = image_tag user.icon_url, style: "height: 2rem"
             .col.s5.m3.l3 = link_to "@" + user.handle, twitter_user_url(user.handle)
