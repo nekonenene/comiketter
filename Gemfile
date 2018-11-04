@@ -1,12 +1,6 @@
 # coding: utf-8
 source "https://rubygems.org"
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
-
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 5.1.4"
 # database for Active Record
@@ -36,7 +30,7 @@ gem "jbuilder", "~> 2.5"
 ## Adding - production
 gem "activerecord-import"
 gem "activerecord-session_store"
-gem "axlsx", github: "randym/axlsx", branch: "master"
+gem "axlsx", ">= 3.0.0.pre"
 gem "devise"
 gem "dotenv-rails"
 gem "exception_notification"
