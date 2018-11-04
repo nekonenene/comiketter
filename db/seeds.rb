@@ -8,6 +8,7 @@
 
 events = [
   {code: "comike93", display_name: "コミックマーケット93", start_date: "2017-12-29".to_date, days: 3},
+  {code: "comike95", display_name: "コミックマーケット95", start_date: "2018-12-29".to_date, days: 3},
 ]
 
 events.each { |event|
