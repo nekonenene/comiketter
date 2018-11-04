@@ -5,7 +5,7 @@ Comiketterは、Twitterのフォロー・フォロワーを取得し、
 
 ## 必要環境
 
-* Ruby 2.4.2
+* Ruby 2.5.3
 * MySQL 5.7
 
 Ruby のインストールには [rbenv](https://github.com/rbenv/rbenv) の使用をお勧めします。

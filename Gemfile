@@ -1,19 +1,13 @@
 # coding: utf-8
 source "https://rubygems.org"
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
-
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 5.2.1"
 # database for Active Record
 # gem "sqlite3"
 gem "mysql2"
 # Use Puma as the app server
-gem "puma", "~> 3.7"
+gem "puma", "~> 3.11"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 5.0"
 # Use Uglifier as compressor for JavaScript assets
@@ -36,7 +30,7 @@ gem "jbuilder", "~> 2.5"
 ## Adding - production
 gem "activerecord-import"
 gem "activerecord-session_store"
-gem "axlsx", github: "randym/axlsx", branch: "master"
+gem "axlsx", ">= 3.0.0.pre"
 gem "devise"
 gem "dotenv-rails"
 gem "exception_notification"
@@ -53,7 +47,7 @@ group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem "capybara", "~> 2.13"
+  gem "capybara"
   gem "selenium-webdriver"
 end
 
